@@ -210,9 +210,9 @@ void EthernetUDP::flush()
   // should only occur if recv fails after telling us the data is there, lets
   // hope the w5100 always behaves :)
 
-  while (_remaining)
+  if (_remaining)
   {
-    read();
+    W5100.skip(_remaining);
   }
 }
 
