@@ -99,8 +99,8 @@ uint16_t send(SOCKET s, const uint8_t * buf, uint16_t len)
   uint16_t ret=0;
   uint16_t freesize=0;
 
-  if (len > W5100.SSIZE) 
-    ret = W5100.SSIZE; // check size not to exceed MAX size.
+  if (len > W5100.SSIZE[s]) 
+    ret = W5100.SSIZE[s]; // check size not to exceed MAX size.
   else 
     ret = len;
 
@@ -199,7 +199,7 @@ uint16_t sendto(SOCKET s, const uint8_t *buf, uint16_t len, uint8_t *addr, uint1
 {
   uint16_t ret=0;
 
-  if (len > W5100.SSIZE) ret = W5100.SSIZE; // check size not to exceed MAX size.
+  if (len > W5100.SSIZE[s]) ret = W5100.SSIZE[s]; // check size not to exceed MAX size.
   else ret = len;
 
   if
@@ -316,8 +316,8 @@ uint16_t igmpsend(SOCKET s, const uint8_t * buf, uint16_t len)
   uint8_t status=0;
   uint16_t ret=0;
 
-  if (len > W5100.SSIZE) 
-    ret = W5100.SSIZE; // check size not to exceed MAX size.
+  if (len > W5100.SSIZE[s]) 
+    ret = W5100.SSIZE[s]; // check size not to exceed MAX size.
   else 
     ret = len;
 
