@@ -88,6 +88,14 @@ void W5500Class::recv_data_processing(SOCKET s, uint8_t *data, uint16_t len, uin
     }
 }
 
+void W5500Class::skip(SOCKET s, uint16_t len)
+{
+    uint16_t ptr;
+    ptr = readSnRX_RD(s);
+    ptr += len;
+    writeSnRX_RD(s, ptr);
+}
+
 void W5500Class::read_data(SOCKET s, volatile uint8_t *src, volatile uint8_t *dst, uint16_t len)
 {
     uint8_t cntl_byte = (0x18+(s<<5));
