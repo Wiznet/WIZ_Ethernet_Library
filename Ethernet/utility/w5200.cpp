@@ -33,13 +33,36 @@ void W5200Class::init(void)
   
   writeMR(1<<RST);
   
+  uint16_t sizes[MAX_SOCK_NUM] = {2048,2048,2048,2048,2048,2048,2048,2048};
+  setTXMemorySizes(sizes);
+  setRXMemorySizes(sizes);
+}
+
+void W5200Class::setTXMemorySizes(uint16_t * sizes)
+{
   for (int i=0; i<MAX_SOCK_NUM; i++) {
-    write((0x4000 + i * 0x100 + 0x001F), 2);
-    write((0x4000 + i * 0x100 + 0x001E), 2);
+    SSIZE[i] = sizes[i];
+    write((0x4000 + i * 0x100 + 0x001F), SSIZE[i] >> 10);
   }
+  SMASK[0] = SSIZE[0] - 1;
+  SBASE[0] = TXBUF_BASE;
+  for (int i=1; i<MAX_SOCK_NUM; i++) {
+	SMASK[i] = SSIZE[i] - 1;
+    SBASE[i] = SBASE[i-1] + SSIZE[i];
+  }
+}
+
+void W5200Class::setRXMemorySizes(uint16_t * sizes)
+{
   for (int i=0; i<MAX_SOCK_NUM; i++) {
-    SBASE[i] = TXBUF_BASE + SSIZE * i;
-    RBASE[i] = RXBUF_BASE + RSIZE * i;
+    RSIZE[i] = sizes[i];
+    write((0x4000 + i * 0x100 + 0x001E), RSIZE[i] >> 10);
+  }
+  RMASK[0] = RSIZE[0] - 1;
+  RBASE[0] = RXBUF_BASE;
+  for (int i=1; i<MAX_SOCK_NUM; i++) {
+    RMASK[i] = RSIZE[i] - 1;
+    RBASE[i] = RBASE[i-1] + RSIZE[i];
   }
 }
 
@@ -78,13 +101,13 @@ void W5200Class::send_data_processing_offset(SOCKET s, uint16_t data_offset, con
 {
   uint16_t ptr = readSnTX_WR(s);
   ptr += data_offset;
-  uint16_t offset = ptr & SMASK;
+  uint16_t offset = ptr & SMASK[s];
   uint16_t dstAddr = offset + SBASE[s];
 
-  if (offset + len > SSIZE) 
+  if (offset + len > SSIZE[s]) 
   {
     // Wrap around circular buffer
-    uint16_t size = SSIZE - offset;
+    uint16_t size = SSIZE[s] - offset;
     write(dstAddr, data, size);
     write(SBASE[s], data + size, len - size);
   } 
@@ -123,12 +146,12 @@ void W5200Class::read_data(SOCKET s, volatile uint8_t *src, volatile uint8_t *ds
   uint16_t src_mask;
   uint16_t src_ptr;
 
-  src_mask = (uint16_t)src & RMASK;
+  src_mask = (uint16_t)src & RMASK[s];
   src_ptr = RBASE[s] + src_mask;
 
-  if( (src_mask + len) > RSIZE ) 
+  if( (src_mask + len) > RSIZE[s] ) 
   {
-    size = RSIZE - src_mask;
+    size = RSIZE[s] - src_mask;
     read(src_ptr, (uint8_t *)dst, size);
     dst += size;
     read(RBASE[s], (uint8_t *) dst, len - size);
