@@ -212,7 +212,7 @@ void EthernetUDP::flush()
 
   if (_remaining)
   {
-    W5100.skip(_remaining);
+    W5100.skip(_sock, _remaining);
   }
 }
 
