@@ -183,6 +183,13 @@ public:
    */
   void recv_data_processing(SOCKET s, uint8_t *data, uint16_t len, uint8_t peek = 0);
 
+  /**
+   * @brief Moves the Rx read pointer forward
+   *
+   * This function allows you to skip a number of bytes in the Rx pointer register.
+   */
+  void skip(SOCKET s, uint16_t len);
+
   inline void setGatewayIp(uint8_t *_addr);
   inline void getGatewayIp(uint8_t *_addr);
 
