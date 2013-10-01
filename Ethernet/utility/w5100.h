@@ -16,8 +16,8 @@
 typedef uint8_t SOCKET;
 
 //#define W5100_ETHERNET_SHIELD // Arduino Ethenret Shield and Compatibles ...
-//#define W5200_ETHERNET_SHIELD // WIZ820io, W5200 Ethernet Shield 
-#define W5500_ETHERNET_SHIELD   // WIZ550io, ioShield series of WIZnet
+#define W5200_ETHERNET_SHIELD // WIZ820io, W5200 Ethernet Shield 
+//#define W5500_ETHERNET_SHIELD   // WIZ550io, ioShield series of WIZnet
 
 #if defined(W5500_ETHERNET_SHIELD)
 #define WIZ550io_WITH_MACADDRESS // Use assigned MAC address of WIZ550io
