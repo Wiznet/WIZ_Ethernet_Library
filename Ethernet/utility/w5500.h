@@ -189,6 +189,8 @@ public:
   uint16_t getTXFreeSize(SOCKET s);
   uint16_t getRXReceivedSize(SOCKET s);
   
+  void setTXMemorySizes(uint16_t * sizes);
+  void setRXMemorySizes(uint16_t * sizes);
 
   // W5500 Registers
   // ---------------
@@ -324,9 +326,9 @@ private:
   static const int SOCKETS = 8;
 
 public:
-  static const uint16_t SSIZE = 2048; // Max Tx buffer size
+  uint16_t SSIZE[SOCKETS]; // Max Tx buffer size
 private:
-  static const uint16_t RSIZE = 2048; // Max Rx buffer size
+  uint16_t RSIZE[SOCKETS]; // Max Rx buffer size
 
 private:
 #if defined(REL_GR_KURUMI) || defined(REL_GR_KURUMI_PROTOTYPE)

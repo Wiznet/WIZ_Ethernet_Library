@@ -183,6 +183,8 @@ public:
   uint16_t getTXFreeSize(SOCKET s);
   uint16_t getRXReceivedSize(SOCKET s);
   
+  void setTXMemorySizes(uint16_t * sizes);
+  void setRXMemorySizes(uint16_t * sizes);
 
   // W5100 Registers
   // ---------------
@@ -303,12 +305,12 @@ public:
 private:
   static const uint8_t  RST = 7; // Reset BIT
   static const int SOCKETS = 8;
-  static const uint16_t SMASK = 0x07FF; // Tx buffer MASK
-  static const uint16_t RMASK = 0x07FF; // Rx buffer MASK
+  uint16_t SMASK[SOCKETS]; // Tx buffer MASK
+  uint16_t RMASK[SOCKETS]; // Rx buffer MASK
 public:
-  static const uint16_t SSIZE = 2048; // Max Tx buffer size
+  uint16_t SSIZE[SOCKETS]; // Max Tx buffer size
 private:
-  static const uint16_t RSIZE = 2048; // Max Rx buffer size
+  uint16_t RSIZE[SOCKETS]; // Max Rx buffer size
   uint16_t SBASE[SOCKETS]; // Tx buffer base address
   uint16_t RBASE[SOCKETS]; // Rx buffer base address
 

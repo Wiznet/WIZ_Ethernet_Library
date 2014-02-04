@@ -25,10 +25,26 @@ void W5500Class::init(void)
     delay(300);
     SPI.begin();
 
+    uint16_t sizes[MAX_SOCK_NUM] = {2048,2048,2048,2048,2048,2048,2048,2048};
+    setTXMemorySizes(sizes);
+    setRXMemorySizes(sizes);
+}
+
+void W5500Class::setTXMemorySizes(uint16_t * sizes)
+{
     for (int i=0; i<MAX_SOCK_NUM; i++) {
+        SSIZE[i] = sizes[i];
         uint8_t cntl_byte = (0x0C + (i<<5));
-        write( 0x1E, cntl_byte, 2); //0x1E - Sn_RXBUF_SIZE
-        write( 0x1F, cntl_byte, 2); //0x1F - Sn_TXBUF_SIZE
+        write( 0x1F, cntl_byte, SSIZE[i] >> 10); //0x1F - Sn_TXBUF_SIZE
+    }
+}
+
+void W5500Class::setRXMemorySizes(uint16_t * sizes)
+{
+    for (int i=0; i<MAX_SOCK_NUM; i++) {
+        RSIZE[i] = sizes[i];
+        uint8_t cntl_byte = (0x0C + (i<<5));
+        write( 0x1E, cntl_byte, RSIZE[i] >> 10); //0x1E - Sn_RXBUF_SIZE
     }
 }
 
