@@ -188,6 +188,9 @@ public:
   inline void setRetransmissionTime(uint16_t timeout);
   inline void setRetransmissionCount(uint8_t _retry);
 
+  inline void setPHYCFGR(uint8_t _val);
+  inline uint8_t getPHYCFGR();
+
   void execCmdSn(SOCKET s, SockCMD _cmd);
   
   uint16_t getTXFreeSize(SOCKET s);
@@ -241,6 +244,8 @@ public:
   __GP_REGISTER8 (RCR,    0x001B);    // Retry count
   __GP_REGISTER_N(UIPR,   0x0028, 4); // Unreachable IP address in UDP mode
   __GP_REGISTER16(UPORT,  0x002C);    // Unreachable Port address in UDP mode
+  __GP_REGISTER8 (PHYCFGR,     0x002E);    // PHY Configuration register, default value: 0b 1011 1xxx
+
   
 #undef __GP_REGISTER8
 #undef __GP_REGISTER16
@@ -418,6 +423,15 @@ void W5500Class::setRetransmissionTime(uint16_t _timeout) {
 
 void W5500Class::setRetransmissionCount(uint8_t _retry) {
   writeRCR(_retry);
+}
+
+void W5500Class::setPHYCFGR(uint8_t _val) {
+  writePHYCFGR(_val);
+}
+
+uint8_t W5500Class::getPHYCFGR() {
+//  readPHYCFGR();
+  return read(0x002E, 0x00);
 }
 
 #endif
