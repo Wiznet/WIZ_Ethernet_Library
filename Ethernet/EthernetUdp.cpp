@@ -120,8 +120,6 @@ int EthernetUDP::parsePacket()
   // discard any remaining bytes in the last packet
   flush();
 
-  if (W5100.getRXReceivedSize(_sock) > 0)
-  {
     //HACK - hand-parse the UDP packet using TCP recv method
     uint8_t tmpBuf[8];
     int ret =0; 
@@ -139,9 +137,6 @@ int EthernetUDP::parsePacket()
       ret = _remaining;
     }
     return ret;
-  }
-  // There aren't any packets available
-  return 0;
 }
 
 int EthernetUDP::read()
