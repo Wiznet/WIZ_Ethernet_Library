@@ -14,7 +14,9 @@
 #define TWITTER_H
 
 #include <inttypes.h>
+#ifndef ESP8266				// Not for the ESP8266.
 #include <avr/pgmspace.h>
+#endif
 #if defined(ARDUINO) && ARDUINO > 18   // Arduino 0019 or later
 #include <SPI.h>
 #endif
